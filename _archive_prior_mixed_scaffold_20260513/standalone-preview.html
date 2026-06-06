@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SponsorOS Mission Control</title>
+  <style>
+    :root{color-scheme:dark;--bg:#080b13;--panel:rgba(18,22,36,.88);--line:rgba(148,163,184,.22);--text:#e7ecf7;--muted:#94a3bf;--brand:#57c8ff;--danger:#ff7b7b;--ok:#6de6a6}*{box-sizing:border-box}body{margin:0;font-family:Sora,Inter,Segoe UI,sans-serif;background:radial-gradient(circle at 20% 0%,#203257 0,transparent 35%),radial-gradient(circle at 80% 10%,#38274f 0,transparent 30%),var(--bg);color:var(--text)}.wrap{max-width:1440px;margin:0 auto;padding:22px}.top{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}.kicker{color:var(--brand);text-transform:uppercase;letter-spacing:.08em;font-size:12px;margin:0}h1{margin:6px 0 0;font-size:clamp(24px,3vw,40px)}.chip{border:1px solid var(--line);background:rgba(87,200,255,.14);border-radius:999px;padding:9px 14px;font-size:13px}.banner{margin-top:18px;border:1px solid rgba(255,123,123,.4);background:linear-gradient(120deg,rgba(255,123,123,.18),rgba(22,28,45,.72));border-radius:18px;padding:16px}.banner ul{margin:8px 0 0;padding-left:20px;color:#ffd6dc}.tabs{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.tab{border:1px solid var(--line);background:rgba(20,26,42,.72);color:var(--text);border-radius:12px;padding:10px 14px}.tab.active{border-color:rgba(87,200,255,.65);background:rgba(87,200,255,.2)}.grid{display:grid;gap:12px}.metrics{grid-template-columns:repeat(auto-fit,minmax(165px,1fr));margin-top:18px}.card{border:1px solid var(--line);background:var(--panel);backdrop-filter:blur(8px);border-radius:18px;padding:16px}.metric p{margin:0;color:var(--muted);font-size:13px}.metric h3{margin:8px 0;font-size:28px}.good{color:var(--ok)}.warn{color:#ffb17d}.section{margin-top:20px}.section h2{margin:0 0 10px;font-size:18px}.kanban{display:grid;grid-template-columns:repeat(8,minmax(210px,1fr));gap:10px;overflow-x:auto;padding-bottom:6px}.col{border:1px solid var(--line);border-radius:16px;background:rgba(20,26,42,.68);padding:10px;min-height:220px}.colhead{display:flex;justify-content:space-between;color:#d5dff3;font-weight:700;font-size:13px;margin-bottom:10px}.item h4{margin:0;font-size:14px}.item p{margin:5px 0 10px;color:var(--muted);font-size:12px}.row{display:flex;justify-content:space-between;align-items:center}.pill{border:1px solid var(--line);border-radius:999px;padding:3px 8px;font-size:11px}.approval{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}.actions{display:flex;gap:8px;margin-top:12px}.actions button{border:1px solid var(--line);background:#141a2a;color:var(--text);border-radius:10px;padding:8px 10px}.agents{grid-template-columns:repeat(auto-fit,minmax(230px,1fr));margin-top:18px}.muted{color:var(--muted)}.footer{margin-top:24px;color:var(--muted);font-size:13px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <div><p class="kicker">SponsorOS Mission Control</p><h1>Local-First Sponsorship Command Center</h1></div>
+      <div class="chip">Mode: Safe / Local / Isolated</div>
+    </header>
+    <section class="banner"><strong>Guardrails Active</strong><ul><li>No-send mode: UI placeholders only. No email sending is implemented.</li><li>No-spend mode: no paid integrations or transactions.</li><li>No-VISION mode: isolated from VISION repos and CRM.</li></ul></section>
+    <nav class="tabs"><button class="tab active">Dashboard</button><button class="tab">Agents</button><button class="tab">Reports</button><button class="tab">Settings</button></nav>
+    <section class="grid metrics">
+      <article class="card metric"><p>Leads Found</p><h3>0</h3><span class="warn">Waiting on CRM/OAuth</span></article>
+      <article class="card metric"><p>Qualified</p><h3>0</h3><span class="warn">No lead import yet</span></article>
+      <article class="card metric"><p>Drafts Ready</p><h3>0</h3><span class="good">Draft system ready</span></article>
+      <article class="card metric"><p>Approvals Pending</p><h3>0</h3><span class="good">No external sends</span></article>
+      <article class="card metric"><p>Replies</p><h3>0</h3><span class="warn">Inbox not connected</span></article>
+      <article class="card metric"><p>Pipeline Value</p><h3>$0</h3><span class="warn">Seed list pending</span></article>
+      <article class="card metric"><p>Blockers</p><h3>2</h3><span class="warn">Google OAuth + npm DNS</span></article>
+    </section>
+    <section class="section"><h2>Lead Pipeline</h2><div class="kanban">
+      <div class="col"><div class="colhead"><span>New</span><span>0</span></div></div><div class="col"><div class="colhead"><span>Qualified</span><span>0</span></div></div><div class="col"><div class="colhead"><span>Needs Enrichment</span><span>0</span></div></div><div class="col"><div class="colhead"><span>Draft Ready</span><span>0</span></div></div><div class="col"><div class="colhead"><span>Approved</span><span>0</span></div></div><div class="col"><div class="colhead"><span>Sent</span><span>0</span></div></div><div class="col"><div class="colhead"><span>Replied</span><span>0</span></div></div><div class="col"><div class="colhead"><span>Client</span><span>0</span></div></div>
+    </div></section>
+    <section class="section"><h2>Approval Queue</h2><div class="grid approval"><article class="card"><h3>Queue ready</h3><p class="muted">Approve / Reject / Edit controls are placeholders only. Nothing sends from this dashboard.</p><div class="actions"><button>Approve</button><button>Reject</button><button>Edit</button></div></article></div></section>
+    <section class="section"><h2>Agents</h2><div class="grid agents"><article class="card"><h3>Scout</h3><p class="muted">Lead discovery and source coverage.</p></article><article class="card"><h3>Enricher</h3><p class="muted">Company + contact enrichment.</p></article><article class="card"><h3>Copywriter</h3><p class="muted">Draft outreach and follow-ups.</p></article><article class="card"><h3>Approval Manager</h3><p class="muted">Gatekeeper for final approvals.</p></article><article class="card"><h3>Reply Monitor</h3><p class="muted">Inbound classification after Gmail OAuth.</p></article><article class="card"><h3>Daily Strategist</h3><p class="muted">Daily rollups and prioritization.</p></article></div></section>
+    <p class="footer">Open this file directly while npm registry is blocked. Full React/Vite app is scaffolded in this folder and will build once dependencies install.</p>
+  </div>
+</body>
+</html>

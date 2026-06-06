@@ -1,0 +1,16 @@
+[
+  {
+    "approval_id": "apr-test-001",
+    "status": "Edited",
+    "subject_or_hook": "Local edit",
+    "draft_body": "No send.",
+    "notes": "smoke test"
+  },
+  {
+    "approval_id": "verify-local-001",
+    "status": "Edited",
+    "subject_or_hook": "Verification edit",
+    "draft_body": "Draft only. No send.",
+    "notes": "parent verification smoke test"
+  }
+]

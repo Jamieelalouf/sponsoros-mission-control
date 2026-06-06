@@ -1,0 +1,141 @@
+{
+  "leads": [
+    {
+      "id": "lead-001",
+      "brand": "North Peak Running",
+      "contact": "partnerships@northpeak.example",
+      "stage": "new",
+      "priority": "high",
+      "owner": "Scout Agent",
+      "status": "awaiting triage",
+      "next_action": "Qualify fit and outreach draft"
+    },
+    {
+      "id": "lead-002",
+      "brand": "Blue Harbor Coffee",
+      "contact": "media@blueharbor.example",
+      "stage": "qualified",
+      "priority": "medium",
+      "owner": "Research Agent",
+      "status": "ready for proposal",
+      "next_action": "Prepare sponsorship package"
+    },
+    {
+      "id": "lead-003",
+      "brand": "Aster Mobile",
+      "contact": "sponsors@astermobile.example",
+      "stage": "outreach",
+      "priority": "high",
+      "owner": "Outreach Agent",
+      "status": "email drafted (not sent)",
+      "next_action": "Review draft tone"
+    },
+    {
+      "id": "lead-004",
+      "brand": "Fieldglass Bikes",
+      "contact": "marketing@fieldglass.example",
+      "stage": "negotiation",
+      "priority": "high",
+      "owner": "Deal Agent",
+      "status": "awaiting terms response",
+      "next_action": "Set follow-up reminder"
+    },
+    {
+      "id": "lead-005",
+      "brand": "Summit Energy",
+      "contact": "brand@summitenergy.example",
+      "stage": "won",
+      "priority": "low",
+      "owner": "Ops Agent",
+      "status": "handoff pending",
+      "next_action": "Create launch checklist"
+    }
+  ],
+  "approvals": [
+    {
+      "id": "apr-001",
+      "lead_id": "lead-003",
+      "type": "outreach_copy",
+      "requested_by": "Outreach Agent",
+      "status": "pending",
+      "blocker": "awaiting compliance review"
+    },
+    {
+      "id": "apr-002",
+      "lead_id": "lead-004",
+      "type": "discount_terms",
+      "requested_by": "Deal Agent",
+      "status": "approved",
+      "blocker": "none"
+    },
+    {
+      "id": "apr-003",
+      "lead_id": "lead-002",
+      "type": "proposal_budget",
+      "requested_by": "Research Agent",
+      "status": "pending",
+      "blocker": "budget cap confirmation"
+    },
+    {
+      "id": "apr-004",
+      "lead_id": "lead-001",
+      "type": "lead_score_override",
+      "requested_by": "Scout Agent",
+      "status": "rejected",
+      "blocker": "insufficient audience match"
+    },
+    {
+      "id": "apr-005",
+      "lead_id": "lead-005",
+      "type": "creative_assets",
+      "requested_by": "Ops Agent",
+      "status": "pending",
+      "blocker": "waiting on logo kit"
+    }
+  ],
+  "inbox": {
+    "unread": 8,
+    "starred": 2,
+    "waiting": 3,
+    "last_sync": "local-sample"
+  },
+  "agent_activity": [
+    {
+      "agent": "Scout Agent",
+      "activity": "scored 12 prospects",
+      "state": "active"
+    },
+    {
+      "agent": "Research Agent",
+      "activity": "assembled 3 sponsor briefs",
+      "state": "active"
+    },
+    {
+      "agent": "Outreach Agent",
+      "activity": "prepared 4 outreach drafts",
+      "state": "awaiting approval"
+    },
+    {
+      "agent": "Deal Agent",
+      "activity": "updated term sheet v2",
+      "state": "active"
+    },
+    {
+      "agent": "Ops Agent",
+      "activity": "queued launch checklist",
+      "state": "blocked"
+    }
+  ],
+  "blockers": [
+    "Compliance sign-off for outreach copy",
+    "Budget cap confirmation for proposal",
+    "Creative asset package from sponsor"
+  ],
+  "next_actions": [
+    "Review pending approvals",
+    "Finalize top-priority outreach draft",
+    "Confirm budget constraints",
+    "Schedule follow-up for active negotiations",
+    "Prepare onboarding checklist for won lead"
+  ]
+}

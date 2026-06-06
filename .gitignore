@@ -1,0 +1,22 @@
+
+# Local/runtime/secret exclusions added by backup pass
+.env
+.env.*
+.vercel/
+.netlify/
+.next/
+node_modules/
+dist/
+build/
+coverage/
+.turbo/
+.cache/
+*.db
+*.sqlite
+*.sqlite3
+*.pem
+*.key
+*.p12
+*.crt
+*.der
+*.log

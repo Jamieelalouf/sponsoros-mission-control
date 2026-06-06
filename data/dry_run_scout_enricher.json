@@ -1,0 +1,28 @@
+{
+  "mode": "dry_run",
+  "generated_at": "2026-05-14T04:19:58.305286+00:00",
+  "requested": 50,
+  "verified_count": 0,
+  "leads": [],
+  "shortage_reason": {
+    "requested": 50,
+    "found": 0,
+    "reason": "insufficient_verified_public_candidates",
+    "details": {
+      "places": {
+        "used": false,
+        "reason": "missing_places_key"
+      },
+      "fallback": {
+        "used": true,
+        "issues": {
+          "ddg_error:URLError": 29
+        },
+        "count": 0
+      }
+    }
+  },
+  "no_outbound_contact": true,
+  "no_send_path": true,
+  "write_live_performed": false
+}

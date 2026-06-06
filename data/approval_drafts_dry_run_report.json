@@ -1,0 +1,95 @@
+{
+  "mode": "live",
+  "generated_at": "2026-05-14T04:10:53.405409+00:00",
+  "lead_total_seen": 50,
+  "limit": 25,
+  "candidates_considered": 25,
+  "generated_rows": 25,
+  "skipped_existing": 0,
+  "skipped_status": 0,
+  "report_version": 1,
+  "source_mode": "live_crm",
+  "output_file": "/Users/clawd/sponsoros-mission-control/data/approval_drafts_dry_run_report.json",
+  "rows_preview": [
+    {
+      "approval_id": "apr-5ee2bbcb91",
+      "lead_id": "lead-5ee2bbcb91",
+      "company_name": "PRIME Youth Sports",
+      "subject_or_hook": "Sponsor idea for PRIME Youth Sports",
+      "status": "Pending",
+      "notes": "Auto-generated draft only; ZERO SEND PATH; source_url=https://youthsports.drinkprime.com/; website=https://youthsports.drinkprime.com; fit_score=83"
+    },
+    {
+      "approval_id": "apr-95effe6236",
+      "lead_id": "lead-95effe6236",
+      "company_name": "Gatorade Performance Partner",
+      "subject_or_hook": "Sponsor idea for Gatorade Performance Partner",
+      "status": "Pending",
+      "notes": "Auto-generated draft only; ZERO SEND PATH; source_url=https://performancepartner.gatorade.com/; website=https://performancepartner.gatorade.com; fit_score=83"
+    },
+    {
+      "approval_id": "apr-ed0db868c0",
+      "lead_id": "lead-ed0db868c0",
+      "company_name": "Vita Coco",
+      "subject_or_hook": "Sponsor idea for Vita Coco",
+      "status": "Pending",
+      "notes": "Auto-generated draft only; ZERO SEND PATH; source_url=https://investors.thevitacococompany.com/news-releases/news-release-details/vita-coco-becomes-official-hydration-partner-rush-soccer-new; website=https://investors.thevitacococompany.com; fit_score=83"
+    },
+    {
+      "approval_id": "apr-faa9c034e0",
+      "lead_id": "lead-faa9c034e0",
+      "company_name": "waterdrop\u00ae Sports Sponsoring",
+      "subject_or_hook": "Sponsor idea for waterdrop\u00ae Sports Sponsoring",
+      "status": "Pending",
+      "notes": "Auto-generated draft only; ZERO SEND PATH; source_url=https://www.waterdrop.com/collections/sports; website=https://waterdrop.com; fit_score=83"
+    },
+    {
+      "approval_id": "apr-069a9ca71c",
+      "lead_id": "lead-069a9ca71c",
+      "company_name": "A-Game Ultimate Hydration Beverage",
+      "subject_or_hook": "Sponsor idea for A-Game Ultimate Hydration Beverage",
+      "status": "Pending",
+      "notes": "Auto-generated draft only; ZERO SEND PATH; source_url=https://www.drinkagame.com/; website=https://drinkagame.com; fit_score=75"
+    },
+    {
+      "approval_id": "apr-ab1a3c8569",
+      "lead_id": "lead-ab1a3c8569",
+      "company_name": "Prime Named Official Hydration Provider Of Illinois Youth Soccer",
+      "subject_or_hook": "Sponsor idea for Prime Named Official Hydration Provider Of Illinois Youth Soccer",
+      "status": "Pending",
+      "notes": "Auto-generated draft only; ZERO SEND PATH; source_url=https://www.illinoisyouthsoccer.org/2024/04/18/prime-named-official-hydration-provider-of-illinois-youth-soccer/; website=https://illinoisyouthsoccer.org; fit_score=83"
+    },
+    {
+      "approval_id": "apr-0ec0a8289e",
+      "lead_id": "lead-0ec0a8289e",
+      "company_name": "USA Hockey Names CWENCH Hydration\u2122 As Sponsor",
+      "subject_or_hook": "Sponsor idea for USA Hockey Names CWENCH Hydration\u2122 As Sponsor",
+      "status": "Pending",
+      "notes": "Auto-generated draft only; ZERO SEND PATH; source_url=https://www.usahockey.com/news_article/show/1335823; website=https://usahockey.com; fit_score=83"
+    },
+    {
+      "approval_id": "apr-f8be54b7f8",
+      "lead_id": "lead-f8be54b7f8",
+      "company_name": "Dancewear Solutions: Dancewear, Discount Dance Apparel",
+      "subject_or_hook": "Sponsor idea for Dancewear Solutions: Dancewear, Discount Dance Apparel",
+      "status": "Pending",
+      "notes": "Auto-generated draft only; ZERO SEND PATH; source_url=https://www.dancewearsolutions.com/?srsltid=AfmBOoql8K1ODS6UYiKsR6NdnYQI0xSFVR5ETyHqR6DD9-JMcYgAQ9Mh; website=https://dancewearsolutions.com; fit_score=75"
+    },
+    {
+      "approval_id": "apr-4d0052e940",
+      "lead_id": "lead-4d0052e940",
+      "company_name": "LIVE! Activewear",
+      "subject_or_hook": "Sponsor idea for LIVE! Activewear",
+      "status": "Pending",
+      "notes": "Auto-generated draft only; ZERO SEND PATH; source_url=https://liveactivewear.com/?srsltid=AfmBOophcvqvMSUUZ9iB38KEO4rR_wOKSpryLWG9EyxI73XnuOh3kOZL; website=https://liveactivewear.com; fit_score=75"
+    },
+    {
+      "approval_id": "apr-d94d3b0ae9",
+      "lead_id": "lead-d94d3b0ae9",
+      "company_name": "Brand Ambassadors & Influencers",
+      "subject_or_hook": "Sponsor idea for Brand Ambassadors & Influencers",
+      "status": "Pending",
+      "notes": "Auto-generated draft only; ZERO SEND PATH; source_url=https://www.corpsdancewear.com/pages/ambassador?srsltid=AfmBOoon9rKI4Jsz4aH3pD6cZ1NrTQ50GhzJreT-HHqxPHPdyImx-Ajy; website=https://corpsdancewear.com; fit_score=75"
+    }
+  ]
+}

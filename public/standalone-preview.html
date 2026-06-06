@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SponsorOS Mission Control</title>
+  <style>
+    :root {
+      --bg1: #f4f7ff;
+      --bg2: #eef4ea;
+      --panel: #ffffff;
+      --line: #d8e0d3;
+      --text: #163218;
+      --muted: #5d755c;
+      --accent: #1b7f3a;
+      --warn: #9a6800;
+      --danger: #9a2f2f;
+      --live: #116e31;
+      --sample: #7d6a11;
+    }
+    body { margin: 0; font-family: "IBM Plex Sans", "Segoe UI", sans-serif; background: radial-gradient(circle at 15% 10%, #d9efe0, transparent 28%), linear-gradient(180deg, var(--bg1), var(--bg2)); color: var(--text); }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    .top { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    .sub { color: var(--muted); }
+    .badge { border-radius: 999px; padding: 4px 10px; border: 1px solid var(--line); font-size: 12px; font-weight: 700; }
+    .badge.live { background: #d8f2df; color: var(--live); }
+    .badge.sample { background: #f9f3d6; color: var(--sample); }
+    .guard { margin-top: 8px; font-size: 13px; color: #6b2e2e; border: 1px solid #e6b4b4; background: #fff2f2; border-radius: 8px; padding: 8px 10px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; margin-top: 12px; }
+    .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+    .kpi { font-size: 28px; font-weight: 700; margin: 2px 0; }
+    ul { margin: 8px 0; padding-left: 18px; }
+    .small { color: var(--muted); font-size: 13px; }
+    .pill { border: 1px solid var(--line); border-radius: 999px; padding: 2px 8px; font-size: 12px; }
+    .actions a { display: inline-block; margin-right: 8px; margin-top: 6px; color: #0f5f2b; font-weight: 600; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <h1>SponsorOS Mission Control</h1>
+        <div class="sub">Executive view with locked approvals and read-only inbox triage.</div>
+      </div>
+      <div id="source-badge" class="badge sample">SAMPLE</div>
+    </div>
+    <div class="guard">ZERO SEND PATH. Approval-only operations. No Gmail modify, no drafts, no public posting.</div>
+
+    <div class="grid" id="kpis"></div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Next Actions</h2>
+        <ul id="next-actions"></ul>
+        <div class="actions">
+          <a href="/public/approval-cockpit.html">Open Approval Cockpit</a>
+          <a href="/public/standalone-preview.html">Open Standalone Preview</a>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Blockers</h2>
+        <ul id="blockers"></ul>
+      </div>
+      <div class="card">
+        <h2>Inbox Status</h2>
+        <div id="inbox"></div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card"><h2>Lead Queue</h2><ul id="lead-queue"></ul></div>
+      <div class="card"><h2>Approval Queue</h2><ul id="approval-queue"></ul></div>
+      <div class="card"><h2>Agent Activity</h2><ul id="agent-activity"></ul></div>
+    </div>
+  </div>
+
+  <script>
+    function text(v, fb='n/a') { return (v === undefined || v === null || v === '') ? fb : String(v); }
+    async function loadDashboard() {
+      const data = await (await fetch('/data/dashboard.json')).json();
+      const src = data.source || {};
+      const badge = document.getElementById('source-badge');
+      badge.textContent = text(src.badge, 'SAMPLE');
+      badge.className = 'badge ' + ((src.mode_resolved === 'live') ? 'live' : 'sample');
+
+      const pc = data.pipeline_counts || {};
+      const ex = data.executive || {};
+      document.getElementById('kpis').innerHTML = `
+        <div class="card"><div class="small">Total Leads</div><div class="kpi">${pc.total_leads ?? 0}</div></div>
+        <div class="card"><div class="small">High-Fit Leads</div><div class="kpi">${ex.high_fit_leads ?? 0}</div></div>
+        <div class="card"><div class="small">Pending Approvals</div><div class="kpi">${ex.pending_approvals ?? 0}</div></div>
+        <div class="card"><div class="small">Inbox Needs Response</div><div class="kpi">${ex.inbox_needs_response ?? 0}</div></div>
+      `;
+
+      const inbox = data.inbox_status || {};
+      document.getElementById('inbox').innerHTML = `
+        <div>Unread: <strong>${inbox.unread ?? 0}</strong></div>
+        <div>Needs Reply: <strong>${inbox.waiting ?? 0}</strong></div>
+        <div>Priority: <strong>${inbox.starred ?? 0}</strong></div>
+        <div class="small">Last Sync: ${text(inbox.last_sync, 'n/a')}</div>
+      `;
+
+      const listFill = (id, items, render) => {
+        const el = document.getElementById(id);
+        el.innerHTML = '';
+        (items || []).forEach(item => {
+          const li = document.createElement('li');
+          li.innerHTML = render(item);
+          el.appendChild(li);
+        });
+      };
+
+      listFill('next-actions', data.next_actions, i => text(i));
+      listFill('blockers', data.blockers, i => text(i));
+      listFill('lead-queue', data.lead_queue, lead => `<strong>${text(lead.company_name || lead.brand || lead.lead_id)}</strong> <span class='pill'>${text(lead.status || lead.stage, 'Research')}</span> - score ${text(lead.fit_score, 'n/a')}`);
+      listFill('approval-queue', data.approval_queue, apr => `<strong>${text(apr.subject_or_hook || apr.approval_id)}</strong> <span class='pill'>${text(apr.status,'Pending')}</span> - ${text(apr.notes || apr.company_name)}`);
+      listFill('agent-activity', data.agent_activity, a => `<strong>${text(a.agent || a.agent_name || a.role)}</strong> - ${text(a.activity || a.action || a.notes)} (${text(a.state || a.status, 'active')})`);
+    }
+    loadDashboard().catch(err => {
+      document.body.insertAdjacentHTML('beforeend', `<pre style="color:#9a2f2f;padding:16px;">Failed to load dashboard.json: ${err}</pre>`);
+    });
+  </script>
+</body>
+</html>

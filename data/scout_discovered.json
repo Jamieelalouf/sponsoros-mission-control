@@ -1,0 +1,38 @@
+{
+  "stage": "discover",
+  "generated_at": "2026-05-14T04:19:58.300921+00:00",
+  "requested": 50,
+  "count": 0,
+  "leads": [],
+  "source_meta": {
+    "places": {
+      "used": false,
+      "reason": "missing_places_key"
+    },
+    "fallback": {
+      "used": true,
+      "issues": {
+        "ddg_error:URLError": 29
+      },
+      "count": 0
+    }
+  },
+  "shortage_reason": {
+    "requested": 50,
+    "found": 0,
+    "reason": "insufficient_verified_public_candidates",
+    "details": {
+      "places": {
+        "used": false,
+        "reason": "missing_places_key"
+      },
+      "fallback": {
+        "used": true,
+        "issues": {
+          "ddg_error:URLError": 29
+        },
+        "count": 0
+      }
+    }
+  }
+}

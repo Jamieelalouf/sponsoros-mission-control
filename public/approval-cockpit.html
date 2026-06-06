@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SponsorOS Approval Cockpit (Review Only)</title>
+  <style>
+    :root {
+      --bg1: #f4f7ff;
+      --bg2: #eef4ea;
+      --panel: #ffffff;
+      --line: #d8e0d3;
+      --text: #163218;
+      --muted: #5d755c;
+      --accent: #1b7f3a;
+      --warn-bg: #fff2f2;
+      --warn-line: #e6b4b4;
+      --warn-text: #6b2e2e;
+      --ok-bg: #e9f8ed;
+      --ok-line: #b8e2c0;
+      --ok-text: #116e31;
+    }
+
+    body {
+      margin: 0;
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      background: radial-gradient(circle at 15% 10%, #d9efe0, transparent 28%), linear-gradient(180deg, var(--bg1), var(--bg2));
+      color: var(--text);
+    }
+
+    .wrap { max-width: 1400px; margin: 0 auto; padding: 20px; }
+    .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+    .top h1 { margin: 0; }
+    .meta { color: var(--muted); font-size: 13px; }
+
+    .badge {
+      border-radius: 999px;
+      padding: 6px 12px;
+      border: 1px solid var(--ok-line);
+      background: var(--ok-bg);
+      color: var(--ok-text);
+      font-weight: 700;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .guard {
+      margin-top: 10px;
+      border: 1px solid var(--warn-line);
+      background: var(--warn-bg);
+      color: var(--warn-text);
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 13px;
+    }
+
+    .controls {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    button, select, input[type="file"] {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--text);
+      padding: 8px 10px;
+      font: inherit;
+    }
+
+    button.primary {
+      border-color: #93c8a2;
+      background: #e9f8ed;
+      color: #115429;
+      font-weight: 700;
+    }
+
+    .table-wrap {
+      margin-top: 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--panel);
+      overflow: auto;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      min-width: 1400px;
+      font-size: 13px;
+    }
+
+    thead { background: #f5faf2; }
+    th, td { border-bottom: 1px solid var(--line); padding: 8px; vertical-align: top; text-align: left; }
+    th { font-size: 12px; color: #365238; text-transform: uppercase; letter-spacing: 0.03em; }
+
+    .small { font-size: 12px; color: var(--muted); }
+    .fit { font-weight: 700; }
+
+    textarea {
+      width: 100%;
+      min-height: 80px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px;
+      font: inherit;
+      resize: vertical;
+      box-sizing: border-box;
+    }
+
+    .subject { min-height: 52px; }
+    .notes { min-height: 70px; }
+
+    .row-actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .status-pill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: 11px;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+
+    .empty {
+      padding: 16px;
+      color: var(--muted);
+    }
+
+    .footer {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    a { color: #0f5f2b; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <h1>Approval Cockpit</h1>
+        <div class="meta">Review-only browser cockpit backed by local state. No send path exists in this UI.</div>
+      </div>
+      <div class="badge">ZERO SEND / REVIEW ONLY</div>
+    </div>
+
+    <div class="guard">
+      Approve / Reject / Edit only mutates local browser state and local JSON exports. Nothing in this page sends email,
+      modifies Gmail messages, or calls external delivery endpoints.
+    </div>
+
+    <div class="controls">
+      <button class="primary" id="saveLocalBtn" type="button">Save Local Browser State</button>
+      <button id="exportBtn" type="button">Export Local JSON</button>
+      <label>
+        <span class="small">Import Local JSON</span>
+        <input id="importFile" type="file" accept="application/json" />
+      </label>
+      <button id="resetBtn" type="button">Reset To Dashboard Queue</button>
+      <a href="/">Back To Dashboard</a>
+    </div>
+
+    <div class="table-wrap" id="tableWrap"></div>
+
+    <div class="footer">
+      Optional CLI sync flow (explicit/manual only): <code>npm run approvals:sync-local</code>
+    </div>
+  </div>
+
+  <script>
+    const LOCAL_KEY = 'sponsoros_approval_cockpit_rows_v2';
+    const SOURCE_KEY = 'sponsoros_approval_cockpit_source_rows_v2';
+    const STATUS_VALUES = ['Pending', 'Edited', 'Approved', 'Rejected'];
+
+    let baseRows = [];
+    let rows = [];
+    let currentSourceSig = '';
+
+    function text(v, fallback = '') {
+      return (v === undefined || v === null) ? fallback : String(v);
+    }
+
+    function esc(v) {
+      return text(v, '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;');
+    }
+
+    function noteMeta(notes, key) {
+      const match = text(notes, '').match(new RegExp(`${key}=([^;]+)`));
+      return match ? match[1].trim() : '';
+    }
+
+    function toRow(item) {
+      const notes = text(item.notes, '');
+      return {
+        approval_id: text(item.approval_id, ''),
+        company_name: text(item.company_name, ''),
+        website_or_source_url: text(item.website || item.source_url || item.url || noteMeta(notes, 'website') || noteMeta(notes, 'source_url') || '', ''),
+        fit_score: text(item.fit_score || noteMeta(notes, 'fit_score') || '', ''),
+        subject_or_hook: text(item.subject_or_hook, ''),
+        draft_body: text(item.draft_body, ''),
+        notes,
+        status: STATUS_VALUES.includes(item.status) ? item.status : 'Pending'
+      };
+    }
+
+    function statusSelect(current, idx) {
+      const options = STATUS_VALUES
+        .map((s) => `<option value="${s}" ${s === current ? 'selected' : ''}>${s}</option>`)
+        .join('');
+      return `<select data-field="status" data-idx="${idx}">${options}</select>`;
+    }
+
+    function render() {
+      const root = document.getElementById('tableWrap');
+      if (!rows.length) {
+        root.innerHTML = '<div class="empty">No approvals found in dashboard queue or imported JSON.</div>';
+        return;
+      }
+
+      const body = rows.map((r, idx) => {
+        const status = esc(r.status || 'Pending');
+        return `
+          <tr>
+            <td>
+              <div><strong>${esc(r.approval_id || '(missing id)')}</strong></div>
+              <div class="small">${esc(r.company_name || 'n/a')}</div>
+            </td>
+            <td>
+              ${r.website_or_source_url ? `<a href="${esc(r.website_or_source_url)}" target="_blank" rel="noopener noreferrer">${esc(r.website_or_source_url)}</a>` : '<span class="small">n/a</span>'}
+            </td>
+            <td><span class="fit">${esc(r.fit_score || 'n/a')}</span></td>
+            <td>
+              <textarea class="subject" data-field="subject_or_hook" data-idx="${idx}">${esc(r.subject_or_hook)}</textarea>
+            </td>
+            <td>
+              <textarea data-field="draft_body" data-idx="${idx}">${esc(r.draft_body)}</textarea>
+            </td>
+            <td>
+              <textarea class="notes" data-field="notes" data-idx="${idx}">${esc(r.notes)}</textarea>
+            </td>
+            <td>
+              <div class="status-pill">${status}</div>
+              ${statusSelect(r.status, idx)}
+            </td>
+            <td>
+              <div class="row-actions">
+                <button type="button" data-action="approve" data-idx="${idx}">Approve</button>
+                <button type="button" data-action="reject" data-idx="${idx}">Reject</button>
+                <button type="button" data-action="mark-edited" data-idx="${idx}">Mark Edited</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      root.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Approval / Company</th>
+              <th>Website / Source URL</th>
+              <th>Fit Score</th>
+              <th>Subject</th>
+              <th>Body</th>
+              <th>Notes</th>
+              <th>Status</th>
+              <th>Controls</th>
+            </tr>
+          </thead>
+          <tbody>${body}</tbody>
+        </table>
+      `;
+    }
+
+    function sourceSignature(source) {
+      return JSON.stringify(source.map((item) => [item.approval_id, item.lead_id, item.company_name, item.status]));
+    }
+
+    function saveLocalState() {
+      localStorage.setItem(LOCAL_KEY, JSON.stringify(rows));
+      localStorage.setItem(SOURCE_KEY, currentSourceSig);
+    }
+
+    function loadLocalState() {
+      const raw = localStorage.getItem(LOCAL_KEY);
+      const savedSourceSig = localStorage.getItem(SOURCE_KEY);
+      if (!raw || savedSourceSig !== currentSourceSig) return false;
+      try {
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) return false;
+        rows = parsed.map(toRow);
+        return true;
+      } catch {
+        return false;
+      }
+    }
+
+    function exportRows() {
+      const blob = new Blob([JSON.stringify(rows, null, 2)], { type: 'application/json' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'approval_cockpit_local_edits.json';
+      link.click();
+      URL.revokeObjectURL(link.href);
+    }
+
+    function resetToSource() {
+      rows = baseRows.map((item) => ({ ...item }));
+      saveLocalState();
+      render();
+    }
+
+    async function loadSourceRows() {
+      const response = await fetch('/data/dashboard.json');
+      const data = await response.json();
+      const queue = Array.isArray(data.approval_queue) ? data.approval_queue : [];
+      const source = queue.slice(0, 200).map(toRow);
+      baseRows = source;
+      currentSourceSig = sourceSignature(baseRows);
+      return source;
+    }
+
+    function onInputChange(event) {
+      const target = event.target;
+      const idx = Number(target.dataset.idx);
+      const field = target.dataset.field;
+      if (!Number.isInteger(idx) || idx < 0 || idx >= rows.length || !field) return;
+      rows[idx][field] = target.value;
+      if (field === 'subject_or_hook' || field === 'draft_body' || field === 'notes') {
+        if (rows[idx].status === 'Pending') rows[idx].status = 'Edited';
+      }
+      saveLocalState();
+      render();
+    }
+
+    function onControlClick(event) {
+      const btn = event.target.closest('button[data-action]');
+      if (!btn) return;
+      const idx = Number(btn.dataset.idx);
+      if (!Number.isInteger(idx) || idx < 0 || idx >= rows.length) return;
+      const action = btn.dataset.action;
+
+      if (action === 'approve') rows[idx].status = 'Approved';
+      if (action === 'reject') rows[idx].status = 'Rejected';
+      if (action === 'mark-edited') rows[idx].status = 'Edited';
+
+      saveLocalState();
+      render();
+    }
+
+    async function importRowsFromFile(file) {
+      const textData = await file.text();
+      const parsed = JSON.parse(textData);
+      if (!Array.isArray(parsed)) {
+        throw new Error('Imported JSON must be an array of approval rows.');
+      }
+      rows = parsed.map(toRow);
+      saveLocalState();
+      render();
+    }
+
+    async function init() {
+      await loadSourceRows();
+      const loadedLocal = loadLocalState();
+      if (!loadedLocal) {
+        rows = baseRows.map((item) => ({ ...item }));
+        saveLocalState();
+      }
+
+      render();
+
+      const saveLocalBtn = document.getElementById('saveLocalBtn');
+      saveLocalBtn.addEventListener('click', () => {
+        saveLocalState();
+        alert('Saved local browser state only.');
+      });
+
+      document.getElementById('exportBtn').addEventListener('click', exportRows);
+      document.getElementById('resetBtn').addEventListener('click', resetToSource);
+
+      document.getElementById('importFile').addEventListener('change', async (event) => {
+        const file = event.target.files && event.target.files[0];
+        if (!file) return;
+        try {
+          await importRowsFromFile(file);
+          alert('Imported local JSON into browser state.');
+        } catch (err) {
+          alert(`Import failed: ${err.message || err}`);
+        }
+      });
+
+      document.getElementById('tableWrap').addEventListener('change', onInputChange);
+      document.getElementById('tableWrap').addEventListener('click', onControlClick);
+    }
+
+    init().catch((err) => {
+      document.body.insertAdjacentHTML(
+        'beforeend',
+        `<pre style="color:#9a2f2f;padding:16px;">Failed to load approval cockpit: ${esc(err.message || err)}</pre>`
+      );
+    });
+  </script>
+</body>
+</html>

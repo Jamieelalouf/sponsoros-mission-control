@@ -1,0 +1,31 @@
+{
+  "mode": "dry_run_forced",
+  "reason": null,
+  "generated_at": "2026-05-14T02:56:10.759084+00:00",
+  "messages": [
+    {
+      "inbox_id": "19e243cc6dff0e07",
+      "thread_id": "19e243cc6dff0e07",
+      "from_email": "no-reply@accounts.google.com",
+      "from_name": "Google",
+      "subject": "Security alert",
+      "snippet": "You allowed macOS access to some of your Google Account data sponsorosops@gmail.com If you didn&#39;t allow macOS access to some of your Google Account data, someone else may be trying to access your",
+      "status": "new",
+      "priority": "normal",
+      "received_at": "2026-05-14T02:07:02+00:00",
+      "notes": "synced_readonly"
+    },
+    {
+      "inbox_id": "19e24255ba23f911",
+      "thread_id": "19e24255ba23f911",
+      "from_email": "no-reply@google.com",
+      "from_name": "Google",
+      "subject": "Sponsoros Ops, finish setting up your new Google Account",
+      "snippet": "Hi Sponsoros Ops, Welcome to Google. Your new account comes with access to Google products, apps, and services. Here are a few tips to get you started. Get the most out of your Google Account We&#39;ll",
+      "status": "new",
+      "priority": "normal",
+      "received_at": "2026-05-14T01:33:43+00:00",
+      "notes": "synced_readonly"
+    }
+  ]
+}
